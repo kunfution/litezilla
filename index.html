@@ -11,31 +11,31 @@
   <h1>🎨 Pixel Art con Círculos</h1>
 
   <div class="controls">
-    <label for="upload">📁 Subir imagen: </label>
+    <label for="upload">📁 Upload Image: </label>
     <input type="file" id="upload" accept="image/*" /><br><br>
 
-    <label for="paletteSelect">🎨 Paleta de colores:</label>
+    <label for="paletteSelect">🎨 Color Palette:</label>
     <select id="paletteSelect">
-      <option value="basic">Básica</option>
-      <option value="colorful">Colorida</option>
-      <option value="grayscale">Escala de grises</option>
+      <option value="basic">Basic</option>
+      <option value="colorful">High Color</option>
+      <option value="grayscale">Gray Scale</option>
       <option value="litezilla">Litezilla</option>
     </select><br><br>
 
-    <label for="sourceSelect">🗂 Categoría aleatoria:</label>
+    <label for="sourceSelect">🗂 Categories:</label>
     <select id="sourceSelect">
       <option value="picsum">Picsum</option>
-      <option value="pop">Cultura Pop</option>
-      <option value="art">Arte / Inspiración artística</option>
-      <option value="kids">Infantiles</option>
+      <option value="pop">Pop Culture</option>
+      <option value="art">Art</option>
+      <option value="kids">Kids</option>
     </select><br><br>
 
-    <label for="sensitivity">🎚 Sensibilidad de color: <span id="sensitivityValue">60</span></label><br>
+    <label for="sensitivity">🎚 Color Sensitivity: <span id="sensitivityValue">60</span></label><br>
     <input type="range" id="sensitivity" min="0" max="150" value="60" /><br><br>
 
-    <button id="downloadBtn">⬇️ Descargar PNG</button>
-    <button id="exportJSON">💾 Exportar JSON</button>
-    <button id="randomBtn">🎲 Generar aleatoria</button>
+    <button id="downloadBtn">⬇️ Download PNG</button>
+    <button id="exportJSON">💾 Export JSON</button>
+    <button id="randomBtn">🎲 Generate</button>
   </div>
 
   <img id="preview" src="" alt="Vista previa" style="display:none;max-width:150px;margin:1em auto;display:block;"/>
