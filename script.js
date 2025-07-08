@@ -73,9 +73,9 @@ randomBtn.addEventListener("click", async () => {
   const source = sourceSelect.value;
   let query = "random";
 
-  if (source === "pop") query = "cute vector,cartoon animal";
-  else if (source === "art") query = "cute vector,cartoon animal";
-  else if (source === "kids") query = "vector,minimalist,flat,illustration,children";
+  if (source === "pop") query = "cute vector,pop, popular";
+  else if (source === "art") query = "cute vector,artistic, art";
+  else if (source === "kids") query = "vector,minimalist,flat,illustration,high contrast";
 
 
   if (source === "picsum") {
