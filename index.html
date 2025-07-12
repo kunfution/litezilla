@@ -3,45 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pixel Art con Círculos</title>
+  <title>Pixel Art PRO</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>🎨 Pixel Art con Círculos</h1>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>🎨 Pixel Art PRO</h2>
 
-  <div class="controls">
-    <label for="upload">📁 Upload Image: </label>
-    <input type="file" id="upload" accept="image/*" /><br><br>
+    <section>
+      <h3>📁 Imagen</h3>
+      <label for="upload">Subir:</label>
+      <input type="file" id="upload" accept="image/*" />
 
-    <label for="paletteSelect">🎨 Color Palette:</label>
-    <select id="paletteSelect">
-      <option value="basic">Basic</option>
-      <option value="colorful">High Color</option>
-      <option value="grayscale">Gray Scale</option>
-      <option value="litezilla">Litezilla</option>
-    </select><br><br>
+      <label for="sourceSelect">Banco:</label>
+      <select id="sourceSelect">
+        <option value="picsum">Picsum</option>
+        <option value="pop">Unsplash Pop</option>
+        <option value="art">Unsplash Art</option>
+        <option value="kids">Unsplash Kids</option>
+      </select>
+      <button id="randomBtn">🎲 Random</button>
+    </section>
 
-    <label for="sourceSelect">🗂 Categories:</label>
-    <select id="sourceSelect">
-      <option value="picsum">Picsum</option>
-      <option value="pop">Pop Culture</option>
-      <option value="art">Art</option>
-      <option value="kids">Kids</option>
-    </select><br><br>
+    <section>
+      <h3>⚙️ Ajustes</h3>
+      <label for="paletteSelect">Paleta:</label>
+      <select id="paletteSelect">
+        <option value="basic">Basic</option>
+        <option value="colorful">High Color</option>
+        <option value="grayscale">Gray Scale</option>
+        <option value="litezilla">Litezilla</option>
+      </select>
 
-    <label for="sensitivity">🎚 Color Sensitivity: <span id="sensitivityValue">60</span></label><br>
-    <input type="range" id="sensitivity" min="0" max="150" value="60" /><br><br>
+      <label for="sizePreset">Tamaño:</label>
+      <select id="sizePreset">
+        <option value="16x14">16x14</option>
+        <option value="24x12">24x12</option>
+        <option value="23x23">23x23</option>
+        <option value="37x23">37x23</option>
+        <option value="51x23" selected>51x23</option>
+        <option value="51x26">51x26</option>
+        <option value="66x26">66x26</option>
+        <option value="78x26">78x26</option>
+        <option value="custom">Personalizado</option>
+      </select>
 
-    <button id="downloadBtn">⬇️ Download PNG</button>
-    <button id="exportJSON">💾 Export JSON</button>
-    <button id="randomBtn">🎲 Generate</button>
-  </div>
+      <div id="customSize" style="display: none;">
+        <label>Cols:</label><input type="number" id="colsInput" value="51">
+        <label>Rows:</label><input type="number" id="rowsInput" value="23">
+      </div>
 
-  <img id="preview" src="" alt="Vista previa" style="display:none;max-width:150px;margin:1em auto;display:block;"/>
+      <label for="allowOriginal"><input type="checkbox" id="allowOriginal" checked> Permitir matices</label>
+    </section>
 
-  <canvas id="canvas" width="1020" height="600"></canvas>
+    <section>
+      <h3>🖌 Herramientas</h3>
+      <label for="paintMode">Modo Pintura:</label>
+      <select id="paintMode">
+        <option value="single">Individual</option>
+        <option value="square">Cuadro</option>
+        <option value="circle">Círculo</option>
+        <option value="brush">Pincel</option>
+        <option value="eraser">Borrador</option>
+      </select>
 
-  <script src="script.js"></script>
+      <label for="paintSize">Tamaño:</label>
+      <input type="number" id="paintSize" value="2" min="1" max="20">
+
+      <button id="undoBtn">↩️ Deshacer</button>
+      <button id="redoBtn">↪️ Rehacer</button>
+      <button id="panModeBtn">🖐️ Pan Mode</button>
+      <button id="focusModeBtn">🖼️ Enfoque</button>
+    </section>
+
+    <section>
+      <h3>⬇️ Exportar</h3>
+      <button id="downloadBtn">PNG</button>
+      <button id="exportJSON">JSON</button>
+      <button id="saveDesignBtn">Guardar</button>
+      <input type="file" id="loadDesignInput" accept=".json" style="display:none;">
+      <button id="loadDesignBtn">Cargar</button>
+    </section>
+  </aside>
+
+  <!-- WORKSPACE -->
+  <main class="workspace">
+    <div class="canvas-wrapper">
+      <div class="side-control">
+        <label>Sensibilidad <span id="sensitivityValue">60</span></label>
+        <input type="range" id="sensitivity" min="0" max="150" value="60" orient="vertical">
+      </div>
+
+      <canvas id="canvas" width="1020" height="600"></canvas>
+
+      <div class="side-control">
+        <label>Escala <span id="scaleValue">100%</span></label>
+        <input type="range" id="scaleInput" min="10" max="400" value="100" orient="vertical">
+      </div>
+    </div>
+
+    <div class="palette custom-palette">
+      <div class="color" style="background:#333;" data-color="51,51,51"></div>
+      <div class="color" style="background:#fff;" data-color="255,255,255"></div>
+      <div class="color" style="background:#f00;" data-color="255,0,0"></div>
+      <div class="color" style="background:#f90;" data-color="255,153,0"></div>
+      <div class="color" style="background:#ff0;" data-color="255,255,0"></div>
+      <div class="color" style="background:#0f0;" data-color="0,255,0"></div>
+      <div class="color" style="background:#00f;" data-color="0,0,255"></div>
+      <div class="color" style="background:#fbb;" data-color="255,182,193"></div>
+      <div class="color" style="background:#808;" data-color="128,0,128"></div>
+      <div class="color" style="background:#0ff;" data-color="0,255,255"></div>
+    </div>
+
+    <div id="originalPreviewContainer">
+      <h4>Imagen Original</h4>
+      <img id="originalPreview" src="" alt="Preview Original">
+    </div>
+  </main>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
