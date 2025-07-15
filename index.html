@@ -13,11 +13,11 @@
     <h2>🎨 Pixel Art PRO</h2>
 
     <section>
-      <h3>📁 Imagen</h3>
-      <label for="upload">Subir:</label>
+      <h3>📁 Image</h3>
+      <label for="upload">Upload:</label>
       <input type="file" id="upload" accept="image/*" />
 
-      <label for="sourceSelect">Banco:</label>
+      <label for="sourceSelect">Source:</label>
       <select id="sourceSelect">
         <option value="picsum">Picsum</option>
         <option value="pop">Unsplash Pop</option>
@@ -28,16 +28,16 @@
     </section>
 
     <section>
-      <h3>⚙️ Ajustes</h3>
-      <label for="paletteSelect">Paleta:</label>
+      <h3>⚙️ Colors</h3>
+      <label for="paletteSelect">Palette:</label>
       <select id="paletteSelect">
         <option value="basic">Basic</option>
         <option value="colorful">High Color</option>
-        <option value="grayscale">Gray Scale</option>
+        <option value="grayscale">Gray Scale (out of service)</option>
         <option value="litezilla">Litezilla</option>
       </select>
 
-      <label for="sizePreset">Tamaño:</label>
+      <label for="sizePreset">Size:</label>
       <select id="sizePreset">
         <option value="16x14">16x14</option>
         <option value="24x12">24x12</option>
@@ -47,7 +47,7 @@
         <option value="51x26">51x26</option>
         <option value="66x26">66x26</option>
         <option value="78x26">78x26</option>
-        <option value="custom">Personalizado</option>
+        <option value="custom">Custom</option>
       </select>
 
       <div id="customSize" style="display: none;">
@@ -55,52 +55,52 @@
         <label>Rows:</label><input type="number" id="rowsInput" value="23">
       </div>
 
-      <label for="allowOriginal"><input type="checkbox" id="allowOriginal" checked> Permitir matices</label>
+      <label for="allowOriginal"><input type="checkbox" id="allowOriginal" checked> Allow Gradiants</label>
     </section>
 
     <section>
-      <h3>🖌 Herramientas</h3>
-      <label for="paintMode">Modo Pintura:</label>
+      <h3>🖌 Brush Tools</h3>
+      <label for="paintMode">Paint Mood:</label>
       <select id="paintMode">
         <option value="single">Individual</option>
-        <option value="square">Cuadro</option>
-        <option value="circle">Círculo</option>
-        <option value="brush">Pincel</option>
-        <option value="eraser">Borrador</option>
+        <option value="square">Square</option>
+        <option value="circle">Circle</option>
+        <option value="brush">Brush</option>
+        <option value="eraser">Eraser (out of service)</option>
         <option value="bucket-area">Bucket (Área)</option>
         <option value="bucket-global">Bucket (Global)</option>
       </select>
 
-      <label for="paintSize">Tamaño:</label>
+      <label for="paintSize">Brush Size:</label>
       <input type="number" id="paintSize" min="0" max="10" value="0">
 
-      <button id="undoBtn">↩️ Deshacer</button>
-      <button id="redoBtn">↪️ Rehacer</button>
+      <button id="undoBtn">↩️ Undo</button>
+      <button id="redoBtn">↪️ Redo</button>
       <button id="panModeBtn">🖐️ Pan Mode</button>
-      <button id="focusModeBtn">🖼️ Enfoque</button>
+      <button id="focusModeBtn">🖼️ Full screen (Out of service)</button>
     </section>
 
     <section>
       <h3>⬇️ Exportar</h3>
-      <button id="downloadBtn">📷 Descargar PNG</button>
+      <button id="downloadBtn">📷 Download PNG</button>
       <button id="exportJSON">JSON</button>
-      <button id="saveDesignBtn">Guardar</button>
+      <button id="saveDesignBtn">Save</button>
       <input type="file" id="loadDesignInput" accept=".json" style="display:none;">
-      <button id="loadDesignBtn">Cargar</button>
+      <button id="loadDesignBtn">Load</button>
     </section>
   </aside>
 
   <main class="workspace">
     <div class="canvas-wrapper">
       <div class="side-control">
-        <label>Sensibilidad <span id="sensitivityValue">0</span></label>
+        <label>Color Sensibility <span id="sensitivityValue">0</span></label>
         <input type="range" id="sensitivity" min="0" max="150" value="0" orient="vertical">
       </div>
 
       <canvas id="canvas" width="1020" height="600"></canvas>
 
       <div class="side-control">
-        <label>Escala <span id="scaleValue">100%</span></label>
+        <label>Scale <span id="scaleValue">100%</span></label>
         <input type="range" id="scaleInput" min="10" max="400" value="100" orient="vertical">
       </div>
     </div>
@@ -119,7 +119,7 @@
     </div>
 
     <div id="originalPreviewContainer">
-      <h4>Imagen Original</h4>
+      <h4>Original Image</h4>
       <img id="originalPreview" src="" alt="Preview Original">
     </div>
   </main>
