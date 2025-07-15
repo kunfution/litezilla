@@ -19,7 +19,6 @@ const exportJSON = document.getElementById("exportJSON");
 const customPalette = document.querySelector(".palette");
 const colors = customPalette.querySelectorAll(".color");
 const paintModeMain = document.getElementById("paintMode");
-const paintModeFocus = document.getElementById("paintModeFocus");
 const paintSizeInput = document.getElementById("paintSize");
 const originalPreview = document.getElementById("originalPreview");
 
@@ -30,6 +29,7 @@ const loadDesignInput = document.getElementById("loadDesignInput");
 const loadDesignBtn = document.getElementById("loadDesignBtn");
 const panModeBtn = document.getElementById("panModeBtn");
 const focusModeBtn = document.getElementById("focusModeBtn");
+const exitFocusBtn = document.getElementById("exitFocusBtn");
 
 let selectedCustomColor = null;
 let isPainting = false;
@@ -48,16 +48,6 @@ let maxCols = 51;
 let maxRows = 23;
 let currentImage = null;
 let pixelMatrix = [];
-
-// Sincronizar selectores (si usas ambos)
-if (paintModeFocus) {
-  paintModeMain.addEventListener("change", () => {
-    paintModeFocus.value = paintModeMain.value;
-  });
-  paintModeFocus.addEventListener("change", () => {
-    paintModeMain.value = paintModeFocus.value;
-  });
-}
 
 function getPaintMode() {
   return paintModeMain.value;
@@ -328,6 +318,12 @@ canvas.addEventListener("mousedown", (e) => {
     panStart = { x: e.clientX - imageOffsetX, y: e.clientY - imageOffsetY };
   } else {
     isPainting = true;
+
+    const mode = getPaintMode();
+    if (["brush", "square", "circle", "eraser"].includes(mode)) {
+      saveHistory(); // Solo 1 paso para todo el trazo
+    }
+
     handlePaint(e);
   }
 });
@@ -372,12 +368,22 @@ function handlePaint(e) {
 }
 
 function paintCell(row, col) {
-  if (!selectedCustomColor && getPaintMode() !== "eraser") return;
-
-  const size = parseInt(paintSizeInput.value) || 1;
   const mode = getPaintMode();
 
-  saveHistory();
+  if (mode.startsWith("bucket")) {
+    if (!selectedCustomColor) return;
+    saveHistory();
+    bucketFill(row, col, mode === "bucket-area");
+    return;
+  }
+
+  if (!selectedCustomColor && mode !== "eraser") return;
+
+  const size = parseInt(paintSizeInput.value) || 0;
+
+  if (mode === "single") {
+    saveHistory(); // Guarda un paso individual
+  }
 
   for (let r = row - size; r <= row + size; r++) {
     for (let c = col - size; c <= col + size; c++) {
@@ -387,10 +393,8 @@ function paintCell(row, col) {
 
         if (mode === "single") {
           paint = (r === row && c === col);
-
         } else if (mode === "square" || mode === "brush" || mode === "eraser") {
           paint = true;
-
         } else if (mode === "circle") {
           const dist = Math.sqrt((row - r) ** 2 + (col - c) ** 2);
           if (dist <= size) paint = true;
@@ -406,7 +410,45 @@ function paintCell(row, col) {
   redrawCanvas();
 }
 
+function bucketFill(row, col, contiguous = true) {
+  const target = pixelMatrix[row][col];
+  const replacement = selectedCustomColor;
+  if (!replacement || colorsEqual(target, replacement)) return;
 
+  if (contiguous) {
+    const queue = [[row, col]];
+    const visited = Array.from({ length: maxRows }, () => Array(maxCols).fill(false));
+
+    while (queue.length) {
+      const [r, c] = queue.shift();
+      if (r < 0 || r >= maxRows || c < 0 || c >= maxCols) continue;
+      if (visited[r][c]) continue;
+      visited[r][c] = true;
+
+      if (colorsEqual(pixelMatrix[r][c], target)) {
+        pixelMatrix[r][c] = replacement;
+        queue.push([r + 1, c]);
+        queue.push([r - 1, c]);
+        queue.push([r, c + 1]);
+        queue.push([r, c - 1]);
+      }
+    }
+  } else {
+    for (let r = 0; r < maxRows; r++) {
+      for (let c = 0; c < maxCols; c++) {
+        if (colorsEqual(pixelMatrix[r][c], target)) {
+          pixelMatrix[r][c] = replacement;
+        }
+      }
+    }
+  }
+
+  redrawCanvas();
+}
+
+function colorsEqual(a, b) {
+  return a && b && a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+}
 
 function redrawCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -484,6 +526,27 @@ panModeBtn.addEventListener("click", () => {
 
 focusModeBtn.addEventListener("click", () => {
   document.body.classList.toggle("focus-mode");
+  exitFocusBtn.style.display = document.body.classList.contains("focus-mode") ? "block" : "none";
+});
+
+exitFocusBtn.addEventListener("click", () => {
+  document.body.classList.remove("focus-mode");
+  exitFocusBtn.style.display = "none";
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && document.body.classList.contains("focus-mode")) {
+    document.body.classList.remove("focus-mode");
+    exitFocusBtn.style.display = "none";
+  }
+  if (e.ctrlKey && e.key.toLowerCase() === "z") {
+    undoBtn.click();
+    e.preventDefault();
+  }
+  if (e.ctrlKey && e.key.toLowerCase() === "y") {
+    redoBtn.click();
+    e.preventDefault();
+  }
 });
 
 downloadBtn.addEventListener("click", () => {
@@ -500,4 +563,3 @@ exportJSON.addEventListener("click", () => {
   link.href = URL.createObjectURL(blob);
   link.click();
 });
-
