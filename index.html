@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pixel Art PRO</title>
+  <title>Pixel Art PRO + Bucket Tool</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="app">
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <h2>🎨 Pixel Art PRO</h2>
 
@@ -68,10 +67,12 @@
         <option value="circle">Círculo</option>
         <option value="brush">Pincel</option>
         <option value="eraser">Borrador</option>
+        <option value="bucket-area">Bucket (Área)</option>
+        <option value="bucket-global">Bucket (Global)</option>
       </select>
 
       <label for="paintSize">Tamaño:</label>
-      <input type="number" id="paintSize" value="2" min="1" max="20">
+      <input type="number" id="paintSize" min="0" max="10" value="0">
 
       <button id="undoBtn">↩️ Deshacer</button>
       <button id="redoBtn">↪️ Rehacer</button>
@@ -89,7 +90,6 @@
     </section>
   </aside>
 
-  <!-- WORKSPACE -->
   <main class="workspace">
     <div class="canvas-wrapper">
       <div class="side-control">
