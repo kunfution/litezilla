@@ -480,6 +480,23 @@ function saveHistory() {
   redoStack = [];
 }
 
+// === Guardar PNG ===
+downloadBtn.addEventListener("click", () => {
+  if (!canvas) return;
+
+  canvas.toBlob(function(blob) {
+    if (blob) {
+      const link = document.createElement("a");
+      link.download = "pixel_art.png";
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    } else {
+      alert("⚠️ No se pudo generar la imagen.");
+    }
+  }, "image/png");
+});
+
+
 undoBtn.addEventListener("click", () => {
   if (paintHistory.length > 1) {
     redoStack.push(paintHistory.pop());
@@ -552,7 +569,7 @@ document.addEventListener("keydown", (e) => {
 downloadBtn.addEventListener("click", () => {
   const link = document.createElement("a");
   link.download = "pixel_art.png";
-  link.href = canvas.toDataURL();
+  link.href = canvas.toDataURL("image/png");
   link.click();
 });
 
