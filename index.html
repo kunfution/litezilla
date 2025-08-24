@@ -1,130 +1,359 @@
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pixel Art PRO + Bucket Tool</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Creator</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007acc"/>
+    <script type="module" src="index.tsx"></script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <a href="https://litezilla.com/" target="_blank" rel="noopener noreferrer" class="sidebar-logo-link">
+                <div class="logo-container">
+                    <img src="https://i.ibb.co/W4WRVhy1/off.png" alt="LiteZilla Logo" class="sidebar-logo logo-off-state">
+                    <img src="https://i.ibb.co/jPTt2wND/on.png" alt="LiteZilla Logo Hover" class="sidebar-logo logo-on-state">
+                </div>
+            </a>
 
-<div class="app">
-  <aside class="sidebar">
-    <h2>🎨 Pixel Art PRO</h2>
+            <div class="mode-selector">
+                <button id="mode-generate-btn" class="mode-btn active">Generate</button>
+                <button id="mode-logo-top-btn" class="mode-btn">Logo Top</button>
+            </div>
+            
+            <button id="new-project-btn" class="btn" style="margin-block: 10px;">New Project</button>
 
-    <section>
-      <h3>📁 Image</h3>
-      <label for="upload">Upload:</label>
-      <input type="file" id="upload" accept="image/*" />
+            <div id="generate-sections">
+                <div class="sidebar-section" id="section-image">
+                    <div class="sidebar-header">
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        <h3>Image</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <label for="upload-input">Upload:</label>
+                        <div class="file-upload-wrapper">
+                            <button class="btn file-btn">Choose File</button>
+                            <span class="file-name">No file chosen...</span>
+                            <input type="file" id="upload-input" accept="image/*,.pixelart">
+                        </div>
+                        <div class="label-with-value">
+                            <label for="scale-slider">Scale:</label>
+                            <span id="scale-value">100%</span>
+                        </div>
+                        <input type="range" id="scale-slider" min="0.1" max="5" step="0.05" value="1" disabled>
+                    </div>
+                </div>
 
-      <label for="sourceSelect">Source:</label>
-      <select id="sourceSelect">
-        <option value="picsum">Picsum</option>
-        <option value="pop">Unsplash Pop</option>
-        <option value="art">Unsplash Art</option>
-        <option value="kids">Unsplash Kids</option>
-      </select>
-      <button id="randomBtn">🎲 Random</button>
-    </section>
+                <div class="sidebar-section" id="section-tracing">
+                    <div class="sidebar-header">
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        <h3>Tracing Overlay</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <p class="description">Upload an image to use as a transparent guide for manual tracing. The overlay moves with the canvas.</p>
+                        <label for="overlay-upload-input">Overlay Image:</label>
+                        <div class="file-upload-wrapper">
+                            <button class="btn file-btn">Choose Image</button>
+                            <span class="overlay-file-name">No file chosen...</span>
+                            <input type="file" id="overlay-upload-input" accept="image/*">
+                        </div>
+                        <label for="overlay-opacity-slider">Opacity:</label>
+                        <input type="range" id="overlay-opacity-slider" min="0" max="1" step="0.01" value="0.5" disabled>
+                        <div class="button-group">
+                            <button id="adjust-overlay-btn" class="btn" disabled>Adjust Overlay</button>
+                            <button id="fit-to-grid-btn" class="btn" disabled>Fit to Grid</button>
+                        </div>
+                        <button id="toggle-overlay-btn" class="btn" style="margin-top: 10px;" disabled>Hide Overlay</button>
+                    </div>
+                </div>
 
-    <section>
-      <h3>⚙️ Colors</h3>
-      <label for="paletteSelect">Palette:</label>
-      <select id="paletteSelect">
-        <option value="basic">Basic</option>
-        <option value="colorful">High Color</option>
-        <option value="grayscale">Gray Scale (out of service)</option>
-        <option value="litezilla">Litezilla</option>
-      </select>
+                <div class="sidebar-section" id="section-size">
+                     <div class="sidebar-header">
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        <h3>Size</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <label for="size-select">Size:</label>
+                        <select id="size-select" class="select-css">
+                            <option value="16x14">16x14</option>
+                            <option value="24x12">24x12</option>
+                            <option value="23x23">23x23</option>
+                            <option value="37x23">37x23</option>
+                            <option value="51x23">51x23</option>
+                            <option value="51x26" selected>51x26</option>
+                            <option value="66x26">66x26</option>
+                            <option value="78x26">78x26</option>
+                            <option value="custom">Custom...</option>
+                        </select>
+                        <div id="custom-size-container" class="hidden" style="margin-top: 15px;">
+                            <div class="custom-size-inputs">
+                                <div>
+                                    <label for="custom-width-input">Width (H):</label>
+                                    <input type="number" id="custom-width-input" class="input-css" min="1" max="200" value="51">
+                                </div>
+                                <div>
+                                    <label for="custom-height-input">Height (V):</label>
+                                    <input type="number" id="custom-height-input" class="input-css" min="1" max="200" value="26">
+                                </div>
+                            </div>
+                            <button id="apply-custom-size-btn" class="btn" style="margin-top: 10px;">Apply Custom Size</button>
+                        </div>
+                    </div>
+                </div>
 
-      <label for="sizePreset">Size:</label>
-      <select id="sizePreset">
-        <option value="16x14">16x14</option>
-        <option value="24x12">24x12</option>
-        <option value="23x23">23x23</option>
-        <option value="37x23">37x23</option>
-        <option value="51x23" selected>51x23</option>
-        <option value="51x26">51x26</option>
-        <option value="66x26">66x26</option>
-        <option value="78x26">78x26</option>
-        <option value="custom">Custom</option>
-      </select>
+                <div class="sidebar-section" id="section-text">
+                    <div class="sidebar-header">
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        <h3>Text Tool</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <label for="text-input">Text:</label>
+                        <input type="text" id="text-input" class="input-css" placeholder="Enter text...">
+                        <label for="text-size-input">Text Size:</label>
+                        <input type="number" id="text-size-input" value="1" min="1" max="3" class="input-css">
+                        <button id="place-text-btn" class="btn">Add Text</button>
+                    </div>
+                </div>
 
-      <div id="customSize" style="display: none;">
-        <label>Cols:</label><input type="number" id="colsInput" value="51">
-        <label>Rows:</label><input type="number" id="rowsInput" value="23">
-      </div>
+                <div class="sidebar-section" id="section-pattern">
+                     <div class="sidebar-header">
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        <h3>Pattern Fill</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <p class="description">Fill the background with a random geometric pattern. This feature works completely offline.</p>
+                        <button id="generate-bg-btn" class="btn">Generate Background</button>
+                        <button id="stroke-selection-btn" class="btn">Stroke Selection</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="logo-top-sections" class="hidden">
+                <div class="sidebar-section">
+                    <div class="sidebar-header" style="cursor: default;">
+                         <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        <h3>Logo</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <p class="description">Define a pattern on a physical artboard. Upload a logo and select a circle size to fill its shape.</p>
+                        <label for="logo-upload-input">Upload Logo or Project:</label>
+                        <div class="file-upload-wrapper">
+                            <button class="btn file-btn">Choose File</button>
+                            <span id="logo-file-name" class="file-name">No file chosen...</span>
+                            <input type="file" id="logo-upload-input" accept="image/*,.ltjproj">
+                        </div>
+                        
+                        <div id="logo-preview-box" class="preview-box hidden" style="margin-top: 15px; width: 100%; height: auto;">
+                            <p>Logo Preview</p>
+                            <img id="logo-preview-image" src="" alt="Uploaded logo preview" style="max-width: 100%; max-height: 150px; object-fit: contain; background-color: #000; border: 1px solid var(--border-color);">
+                        </div>
+                        
+                        <label for="logo-circle-size" style="margin-top: 15px;">Circle Size:</label>
+                        <select id="logo-circle-size" class="select-css">
+                            <option value="1.0">1.0 inch diameter</option>
+                            <option value="0.5" selected>0.5 inch diameter</option>
+                        </select>
 
-      <label for="allowOriginal"><input type="checkbox" id="allowOriginal" checked> Allow Gradiants</label>
-    </section>
+                        <label for="logo-circle-separation" style="margin-top: 15px;">Circle Separation (mm):</label>
+                        <input type="number" id="logo-circle-separation" class="input-css" value="12" min="0" max="20" step="0.1">
 
-    <section>
-      <h3>🖌 Brush Tools</h3>
-      <label for="paintMode">Paint Mood:</label>
-      <select id="paintMode">
-        <option value="single">Individual</option>
-        <option value="square">Square</option>
-        <option value="circle">Circle</option>
-        <option value="brush">Brush</option>
-        <option value="eraser">Eraser (out of service)</option>
-        <option value="bucket-area">Bucket (Área)</option>
-        <option value="bucket-global">Bucket (Global)</option>
-      </select>
+                        <label for="logo-fill-pattern" style="margin-top: 15px;">Fill Pattern:</label>
+                        <select id="logo-fill-pattern" class="select-css" disabled>
+                            <option value="hexagonal" selected>Hexagonal Grid</option>
+                            <option value="square">Square Grid</option>
+                            <option value="disordered">Disordered Fill</option>
+                            <option value="concentric">Concentric Circles</option>
+                        </select>
 
-      <label for="paintSize">Brush Size:</label>
-      <input type="number" id="paintSize" min="0" max="10" value="0">
+                        <div class="label-with-value" style="margin-top: 15px;">
+                            <label for="logo-sensitivity-slider">Sensitivity:</label>
+                            <span id="logo-sensitivity-value">20</span>
+                        </div>
+                        <input type="range" id="logo-sensitivity-slider" min="1" max="99" step="1" value="20" disabled>
 
-      <button id="undoBtn">↩️ Undo</button>
-      <button id="redoBtn">↪️ Redo</button>
-      <button id="panModeBtn">🖐️ Pan Mode</button>
-      <button id="focusModeBtn">🖼️ Full screen (Out of service)</button>
-    </section>
+                        <div class="checkbox-wrapper">
+                           <input type="checkbox" id="logo-invert-checkbox" class="checkbox-css" disabled>
+                           <label for="logo-invert-checkbox">Invert (for light logos)</label>
+                        </div>
 
-    <section>
-      <h3>⬇️ Exportar</h3>
-      <button id="downloadBtn">📷 Download PNG</button>
-      <button id="exportJSON">JSON</button>
-      <button id="saveDesignBtn">Save</button>
-      <input type="file" id="loadDesignInput" accept=".json" style="display:none;">
-      <button id="loadDesignBtn">Load</button>
-    </section>
-  </aside>
+                        <div class="button-group" style="margin-top: 15px;">
+                           <button id="adjust-logo-btn" class="btn" disabled>Adjust Logo</button>
+                           <button id="hide-logo-btn" class="btn" disabled>Hide Logo</button>
+                        </div>
+                        <button id="generate-logo-top-btn" class="btn" style="margin-top: 5px;" disabled>Generate Fill</button>
+                        <button id="generate-logo-top-edges-btn" class="btn" disabled>Generate Edges</button>
+                    </div>
+                </div>
 
-  <main class="workspace">
-    <div class="canvas-wrapper">
-      <div class="side-control">
-        <label>Color Sensibility <span id="sensitivityValue">0</span></label>
-        <input type="range" id="sensitivity" min="0" max="150" value="0" orient="vertical">
-      </div>
+                <div class="sidebar-section" id="section-logo-top-size">
+                    <div class="sidebar-header">
+                        <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                        <h3>Size</h3>
+                    </div>
+                    <div class="sidebar-content">
+                        <label for="logo-top-size-select">Artboard Size:</label>
+                        <select id="logo-top-size-select" class="select-css">
+                            <option value="95.1x18">Default (95.1 x 18 in)</option>
+                            <option value="23x23" selected>Medium Square (23 x 23 in)</option>
+                            <option value="custom">Custom...</option>
+                        </select>
+                        <div id="logo-top-custom-size-container" class="hidden" style="margin-top: 15px;">
+                            <div class="custom-size-inputs">
+                                <div>
+                                    <label for="logo-top-custom-width-input">Width (in):</label>
+                                    <input type="number" id="logo-top-custom-width-input" class="input-css" min="1" max="200" value="95.1" step="0.1">
+                                </div>
+                                <div>
+                                    <label for="logo-top-custom-height-input">Height (in):</label>
+                                    <input type="number" id="logo-top-custom-height-input" class="input-css" min="1" max="200" value="18" step="0.1">
+                                </div>
+                            </div>
+                            <button id="apply-logo-top-custom-size-btn" class="btn" style="margin-top: 10px;">Apply Custom Size</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Brush section is now outside of generate/logo-top specific sections -->
+            <div class="sidebar-section" id="section-brush">
+                <div class="sidebar-header">
+                    <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    <h3>Tools</h3>
+                </div>
+                <div class="sidebar-content">
+                    <label for="brush-tool-select">Tool:</label>
+                    <select id="brush-tool-select" class="select-css">
+                        <!-- Generate Tools -->
+                        <option value="pencil" data-mode="generate">Pencil</option>
+                        <option value="square" data-mode="generate">Brush (Square)</option>
+                        <option value="circle" data-mode="generate">Brush (Circle)</option>
+                        <option value="bucket-area" data-mode="generate">Paint Bucket (Area)</option>
+                        <option value="bucket-global" data-mode="generate">Paint Bucket (Global)</option>
+                        <!-- Logo Top Tools -->
+                        <option value="freehand" data-mode="logo-top">Freehand</option>
+                        <option value="eraser" data-mode="logo-top">Eraser</option>
+                        <option value="curve" data-mode="logo-top">Curve Tool</option>
+                    </select>
+                    <label for="brush-size">Brush Size:</label>
+                    <input type="number" id="brush-size" class="input-css" value="1" min="1" max="50">
+                    <div id="curve-tool-controls" class="hidden">
+                        <div class="button-group" style="margin-top: 10px;">
+                            <button id="fill-path-btn" class="btn" disabled>Fill Path</button>
+                            <button id="clear-path-btn" class="btn">Clear Path</button>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button id="undo-btn" class="btn" disabled>Undo</button>
+                        <button id="redo-btn" class="btn" disabled>Redo</button>
+                    </div>
+                </div>
+            </div>
 
-      <canvas id="canvas" width="1020" height="600"></canvas>
+            <div class="sidebar-section" id="section-export">
+                 <div class="sidebar-header">
+                    <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17 16.59 8.59 18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    <h3>Export</h3>
+                </div>
+                <div class="sidebar-content">
+                    <div class="button-group">
+                        <button id="download-btn" class="btn" disabled>Download PNG</button>
+                        <button id="download-svg-btn" class="btn" disabled>Download SVG</button>
+                    </div>
+                    <button id="save-project-btn" class="btn" disabled>Save Project</button>
+                </div>
+            </div>
+            
+            <div class="sidebar-section" style="flex-grow: 1;"></div>
+        </aside>
 
-      <div class="side-control">
-        <label>Scale <span id="scaleValue">100%</span></label>
-        <input type="range" id="scaleInput" min="10" max="400" value="100" orient="vertical">
-      </div>
+        <main class="main-content">
+            <div class="artboard-container">
+                <div class="ruler-corner"></div>
+                <canvas id="top-ruler" class="ruler"></canvas>
+                <canvas id="left-ruler" class="ruler"></canvas>
+                <div class="canvas-wrapper">
+                    <canvas id="pixel-canvas"></canvas>
+                    <canvas id="overlay-canvas"></canvas>
+                </div>
+            </div>
+
+            <div class="bottom-controls">
+                <div class="color-palette" id="color-palette">
+                    <!-- Color swatches will be generated here -->
+                </div>
+                 <div class="bottom-right-controls">
+                    <div id="original-image-preview" class="preview-box hidden">
+                        <img id="source-image" src="" alt="Original uploaded image">
+                    </div>
+                    <div class="preview-box">
+                       <canvas id="canvas-preview"></canvas>
+                    </div>
+                     <div class="toolbar">
+                        <button id="pan-mode-btn" class="icon-btn" title="Pan Tool (H)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                        <button id="select-tool-btn" class="icon-btn" title="Selection Tool (S)">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 3.8l16.4 16.4M20.2 3.8L3.8 20.2"/></svg>
+                        </button>
+                        <button id="light-effect-btn" class="icon-btn" title="Toggle Light Effect (L)">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        </button>
+                        <button id="hotkey-help-btn" class="icon-btn" title="Hotkeys">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </button>
+                    </div>
+                 </div>
+            </div>
+            
+             <div id="zoom-controls" class="zoom-controls hidden">
+                <button id="zoom-out-btn" class="zoom-btn">-</button>
+                <input type="range" id="zoom-slider" min="0.1" max="20" step="0.1" value="1.0">
+                <button id="zoom-in-btn" class="zoom-btn">+</button>
+             </div>
+
+             <div id="hotkey-popover" class="hotkey-popover hidden">
+                <h3>Hotkeys</h3>
+                <dl class="hotkey-list">
+                    <dt><code>B</code></dt><dd>Pencil Tool</dd>
+                    <dt><code>M</code></dt><dd>Brush (Square)</dd>
+                    <dt><code>Shift+M</code></dt><dd>Brush (Circle)</dd>
+                    <dt><code>G</code></dt><dd>Paint Bucket (Area)</dd>
+                    <dt><code>Shift+G</code></dt><dd>Paint Bucket (Global)</dd>
+                    <dt><code>H</code></dt><dd>Pan Tool</dd>
+                    <dt><code>S</code></dt><dd>Selection Tool</dd>
+                    <dt><code>L</code></dt><dd>Toggle Light Effect</dd>
+                    <div class="separator"></div>
+                    <dt><code>Ctrl/Cmd+Z</code></dt><dd>Undo</dd>
+                    <dt><code>Ctrl/Cmd+Y</code></dt><dd>Redo</dd>
+                    <dt><code>Ctrl/Cmd+S</code></dt><dd>Save Project</dd>
+                    <dt><code>Ctrl/Cmd+C</code></dt><dd>Copy Selection</dd>
+                    <dt><code>Ctrl/Cmd+X</code></dt><dd>Cut Selection</dd>
+                    <dt><code>Ctrl/Cmd+V</code></dt><dd>Paste</dd>
+                    <div class="separator"></div>
+                    <dt><code>Delete</code></dt><dd>Delete Selection</dd>
+                    <dt><code>Esc</code></dt><dd>Deselect / Cancel</dd>
+                </dl>
+            </div>
+        </main>
     </div>
 
-    <div class="palette custom-palette">
-      <div class="color" style="background:#333;" data-color="51,51,51"></div>
-      <div class="color" style="background:#fff;" data-color="255,255,255"></div>
-      <div class="color" style="background:#f00;" data-color="255,0,0"></div>
-      <div class="color" style="background:#f90;" data-color="255,153,0"></div>
-      <div class="color" style="background:#ff0;" data-color="255,255,0"></div>
-      <div class="color" style="background:#0f0;" data-color="0,255,0"></div>
-      <div class="color" style="background:#00f;" data-color="0,0,255"></div>
-      <div class="color" style="background:#fbb;" data-color="255,182,193"></div>
-      <div class="color" style="background:#808;" data-color="128,0,128"></div>
-      <div class="color" style="background:#0ff;" data-color="0,255,255"></div>
+    <div id="save-confirm-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>Unsaved Changes</h3>
+            <p>You have unsaved changes in your current project. Do you want to save them before creating a new project?</p>
+            <div class="modal-buttons">
+                <button id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+                <button id="modal-dont-save-btn" class="btn btn-secondary">Don't Save</button>
+                <button id="modal-save-btn" class="btn btn-primary">Save Project</button>
+            </div>
+        </div>
     </div>
 
-    <div id="originalPreviewContainer">
-      <h4>Original Image</h4>
-      <img id="originalPreview" src="" alt="Preview Original">
-    </div>
-  </main>
-</div>
-
-<script src="script.js"></script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>

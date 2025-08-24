@@ -1,0 +1,21 @@
+{
+  "name": "Pixel Art Creator",
+  "short_name": "PixelArt",
+  "description": "An application to convert images into pixel art and draw.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#007acc",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
